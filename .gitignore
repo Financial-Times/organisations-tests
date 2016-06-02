@@ -1,0 +1,10 @@
+orgsanisations-tests
+*.exe*
+*.html
+*coverage.*
+*.iml
+.idea/
+*.xlsx
+*.db
+*.lock
+~*
