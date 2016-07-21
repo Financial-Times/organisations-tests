@@ -2,8 +2,8 @@ package main
 
 import (
 	"crypto/md5"
-	"github.com/pborman/uuid"
 	"fmt"
+	"github.com/pborman/uuid"
 )
 
 var hasher = md5.New()

@@ -2,17 +2,12 @@ package main
 
 import (
 	"errors"
-	//"fmt"
-	//"github.com/Financial-Times/http-handlers-go/httphandlers"
 	log "github.com/Sirupsen/logrus"
-	//"github.com/gorilla/mux"
 	"github.com/jawher/mow.cli"
-	//"github.com/rcrowley/go-metrics"
-	"fmt"
 	"github.com/sethgrid/pester"
 	"net"
-	"os"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -24,11 +19,6 @@ type concorder interface {
 
 type httpClient interface {
 	Get(url string) (resp *http.Response, err error)
-}
-
-func init() {
-	log.SetFormatter(new(log.JSONFormatter))
-	log.SetLevel(log.DebugLevel)
 }
 
 func main() {
@@ -61,6 +51,7 @@ func main() {
 		}
 		log.Println("Finished app")
 	}
+	log.SetOutput(os.Stdout)
 	app.Run(os.Args)
 }
 
@@ -103,11 +94,10 @@ func runApp(compositeOrgsURL, fsURL string, port int) error {
 		}
 	}
 
-	if errs := orgService.compare(); errs != nil && len(errs) > 0 {
-		for err := range errs {
-			log.Errorf("ERROR by comparing content: %v", err)
+	if results := orgService.compare(); results != nil && len(results) > 0 {
+		for _, result := range results {
+			log.Errorf("ERROR by comparing content: %+v, %+v, %+v", result.uuid, result.fieldName, result.err.Error())
 		}
-		return fmt.Errorf("Errors were encountered")
 	}
 	return nil
 
