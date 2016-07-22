@@ -103,7 +103,7 @@ func (s *orgServiceImpl) makeUppIdErrorMap(fsOrg *combinedOrg) (uppIdMap map[str
 	}
 	uppIdMap[fsOrg.UUID] = fmt.Errorf("No UPP identifier found for fsOrg: %v", fsOrg.UUID)
 	for v1UUID, _ := range v1UUIDMap {
-		uppIdMap[v1UUID] = fmt.Errorf("No UPP identifier found for v1Org: %v", v1UUID)
+		uppIdMap[v1UUID] = fmt.Errorf("No UPP identifier found for v1Org: %v (tmeID: %v)", v1UUID, s.concorder.v1UuidToTmeId(v1UUID))
 	}
 	return
 }
@@ -111,7 +111,7 @@ func (s *orgServiceImpl) makeUppIdErrorMap(fsOrg *combinedOrg) (uppIdMap map[str
 func (s *orgServiceImpl) checkIdentifiers(compositeOrg *combinedOrg, fsOrg *combinedOrg) error {
 	var uppIdErrMap map[string]error = s.makeUppIdErrorMap(fsOrg)
 	if uppIdErrMap == nil || len(uppIdErrMap) < 1 {
-		return fmt.Errorf("No concorded uuids for org: %v", fsOrg.UUID)
+		return fmt.Errorf("No concorded uuids for fs org: %v", fsOrg.UUID)
 	}
 	for _, uppID := range compositeOrg.AlternativeIdentifiers.Uuids {
 		delete(uppIdErrMap, uppID)

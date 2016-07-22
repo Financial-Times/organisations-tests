@@ -14,6 +14,7 @@ import (
 type concorder interface {
 	v2tov1(string) (map[string]struct{}, bool, error)
 	v2Uuids() map[string]struct{}
+	v1UuidToTmeId(uuid string) string
 	load() error
 }
 
@@ -69,6 +70,7 @@ func runApp(compositeOrgsURL, fsURL string, port int) error {
 		client:         httpClient,
 		uuidV2:         make(map[string]struct{}),
 		uuidV2toUUIDV1: make(map[string]map[string]struct{}),
+		uuidToTmeId:    make(map[string]string),
 	}
 
 	repo := &httpOrgsRepo{client: httpClient}

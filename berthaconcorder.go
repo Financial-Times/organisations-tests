@@ -17,6 +17,7 @@ type berthaConcorder struct {
 	lk             sync.Mutex
 	uuidV2toUUIDV1 map[string]map[string]struct{}
 	uuidV2         map[string]struct{}
+	uuidToTmeId    map[string]string
 }
 
 //Concordance model
@@ -67,6 +68,7 @@ func (b *berthaConcorder) load() error {
 			continue
 		}
 		v1uuid := v1ToUUID(con.TMEID)
+		b.uuidToTmeId[v1uuid] = con.TMEID
 		v2uuid := con.V2UUID
 		uuidSet, found := b.uuidV2toUUIDV1[v2uuid]
 		if !found {
@@ -89,4 +91,8 @@ func isIncomplete(con Concordance) bool {
 
 func (b *berthaConcorder) v2Uuids() map[string]struct{} {
 	return b.uuidV2
+}
+
+func (b *berthaConcorder) v1UuidToTmeId(uuid string) string {
+	return b.uuidToTmeId[uuid]
 }
